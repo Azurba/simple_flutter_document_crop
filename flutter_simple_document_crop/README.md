@@ -1,0 +1,5 @@
+# A Simple Automatic Document Cropping in Flutter Using the Canny Edge Detector
+## Abstract
+This article presents an efficient method for automatic document cropping in mobile and Windows applications, addressing the common user expectation for document scanning. The proposed strategy leverages the multi-stage Canny Edge Detection algorithm to accurately identify document boundaries. To specifically isolate document perimeters from other detected edges, I suggest an approach that assumes the document is roughly centered and systematically scans from the image's outer edges inwards to pinpoint the outermost white pixels, defining the document's bounding box. This information is then used to programmatically crop the original image, delivering a clean, scan-ready output. The article outlines the implementation steps and demonstrates the practical application of computer vision principles to enhance user experience and streamline document management in modern mobile solutions.
+
+The full article is available here: 
