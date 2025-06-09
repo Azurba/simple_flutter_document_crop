@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: 32,
                   ),
                   label: const Text(
-                    'Crop Image',
+                    'Crop Document',
                     style: TextStyle(color: Colors.white, fontSize: 32),
                   ),
                 ),
