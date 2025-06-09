@@ -49,18 +49,12 @@ class CropService {
     int? boundaryX1, boundaryX2, boundaryY1, boundaryY2;
     const int trimOverlapPixels = 3;
 
-    // Threshold for considering a pixel as part of an edge.
-    // Renamed and slightly altered from previous value.
     bool isProminentEdge(Pixel px) =>
         px.r > 12 && px.g > 12 && px.b > 12 && px.a > 12;
 
-    // Percentage-based inward buffer to avoid scanning noisy edges of the image.
-    final horizontalScanBuffer =
-        (imageWidth * 0.025).toInt(); // Slightly adjusted ratio
-    final verticalScanBuffer =
-        (imageHeight * 0.025).toInt(); // Slightly adjusted ratio
+    final horizontalScanBuffer = (imageWidth * 0.025).toInt();
+    final verticalScanBuffer = (imageHeight * 0.025).toInt();
 
-    // Scan for horizontal boundaries (left and right).
     for (int x = horizontalScanBuffer; x <= centralHorizontalPoint; x++) {
       if (isProminentEdge(featureMapImage.getPixel(x, centralVerticalPoint))) {
         boundaryX1 = x;
@@ -76,7 +70,6 @@ class CropService {
       }
     }
 
-    // Scan for vertical boundaries (top and bottom).
     for (int y = verticalScanBuffer; y <= centralVerticalPoint; y++) {
       if (isProminentEdge(
           featureMapImage.getPixel(centralHorizontalPoint, y))) {
@@ -94,7 +87,6 @@ class CropService {
       }
     }
 
-    // Validate that all boundaries were successfully detected.
     if ([boundaryX1, boundaryX2, boundaryY1, boundaryY2]
         .any((b) => b == null)) {
       print(
@@ -102,7 +94,6 @@ class CropService {
       return;
     }
 
-    // Apply the trim overlap pixels to the detected boundaries.
     final finalCropLeft =
         (boundaryX1! - trimOverlapPixels).clamp(0, imageWidth);
     final finalCropTop =
@@ -112,7 +103,6 @@ class CropService {
     final finalCropBottom =
         (boundaryY2! + trimOverlapPixels).clamp(0, imageHeight);
 
-    // Execute the cropping operation on the original image.
     final croppedImage = copyCrop(
       originalVisual,
       x: finalCropLeft,
@@ -121,11 +111,9 @@ class CropService {
       height: finalCropBottom - finalCropTop,
     );
 
-    // Construct a new output path with a distinct naming convention.
-    final finalProcessedAssetPath = originalAssetPath.replaceFirst(
-        RegExp(r'\.(\w+)$'), '_refined_doc.JPG'); // Changed to .webp
+    final finalProcessedAssetPath =
+        originalAssetPath.replaceFirst(RegExp(r'\.(\w+)$'), '_refined_doc.JPG');
 
-    // Save the newly cropped image.
     await File(finalProcessedAssetPath).writeAsBytes(encodePng(croppedImage));
     print(
         'Document trimming successful! Output saved to: $finalProcessedAssetPath');
