@@ -23,10 +23,10 @@ class CropService {
         .writeAsBytesSync(encodePng(baseVisualRepresentation));
     print('Edge feature map saved to: $edgeFeatureMapPath');
 
-    await _extractDocumen(edgeFeatureMapPath, sourceAssetPath);
+    await _extractDocument(edgeFeatureMapPath, sourceAssetPath);
   }
 
-  Future<void> _extractDocumen(
+  Future<void> _extractDocument(
       String featureMapPath, String originalAssetPath) async {
     final featureMapFile = File(featureMapPath);
     final featureMapRawBytes = await featureMapFile.readAsBytes();
@@ -113,7 +113,7 @@ class CropService {
         (boundaryY2! + trimOverlapPixels).clamp(0, imageHeight);
 
     // Execute the cropping operation on the original image.
-    final meticulouslyCroppedImage = copyCrop(
+    final croppedImage = copyCrop(
       originalVisual,
       x: finalCropLeft,
       y: finalCropTop,
@@ -126,8 +126,7 @@ class CropService {
         RegExp(r'\.(\w+)$'), '_refined_doc.JPG'); // Changed to .webp
 
     // Save the newly cropped image.
-    await File(finalProcessedAssetPath)
-        .writeAsBytes(encodePng(meticulouslyCroppedImage));
+    await File(finalProcessedAssetPath).writeAsBytes(encodePng(croppedImage));
     print(
         'Document trimming successful! Output saved to: $finalProcessedAssetPath');
   }
